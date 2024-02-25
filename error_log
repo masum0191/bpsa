@@ -1,0 +1,9 @@
+[12-Jul-2023 08:56:11 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Controller::committee() in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Controller.php on line 278
+[07-Aug-2023 03:34:24 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Auth\RegisterController::makeApiRequest() in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Auth/RegisterController.php on line 176
+[12-Aug-2023 11:53:10 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\Auth\RegisterController::pverify() in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Auth/RegisterController.php on line 104
+[28-Aug-2023 08:34:25 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Http as Http because the name is already in use in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Api/ApiControllers.php on line 14
+[28-Aug-2023 08:34:33 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Http as Http because the name is already in use in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Api/ApiControllers.php on line 14
+[28-Aug-2023 08:34:52 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Http as Http because the name is already in use in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Api/ApiControllers.php on line 14
+[28-Aug-2023 08:35:52 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Http as Http because the name is already in use in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Api/ApiControllers.php on line 14
+[28-Aug-2023 08:36:07 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Http as Http because the name is already in use in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Api/ApiControllers.php on line 14
+[28-Aug-2023 08:36:18 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Http as Http because the name is already in use in /home/bpsacomb/dev.bpsa.com.bd/app/Http/Controllers/Api/ApiControllers.php on line 14
