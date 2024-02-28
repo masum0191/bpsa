@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Gallery;
 use App\Models\Gcategory;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class GalleryController extends Controller
 {
     /**
@@ -57,10 +58,16 @@ class GalleryController extends Controller
        
         
         if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/gallery'), $filename);
-            $slider->image= \URL::to('/uploads/gallery/').'/'.$filename;
+            $image = $request->file('image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->image= $imageUrl;
+            // $file= $request->file('image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/gallery'), $filename);
+            // $slider->image= \URL::to('/uploads/gallery/').'/'.$filename;
         }
 
 	 $slider->save();
@@ -140,10 +147,16 @@ class GalleryController extends Controller
        
         
         if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/gallery'), $filename);
-            $slider->image= \URL::to('/uploads/gallery/').'/'.$filename;
+            $image = $request->file('image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->image= $imageUrl;
+            // $file= $request->file('image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/gallery'), $filename);
+            // $slider->image= \URL::to('/uploads/gallery/').'/'.$filename;
         }
 	    $slider->save();
         // Return user back and show a flash message

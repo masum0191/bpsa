@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class EventController extends Controller
 {
     /**
@@ -50,10 +51,16 @@ class EventController extends Controller
        
         
         if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/event'), $filename);
-            $event->image= \URL::to('/uploads/event/').'/'.$filename;
+            $image = $request->file('image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $event->image= $imageUrl;
+            // $file= $request->file('image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/event'), $filename);
+            // $event->image= \URL::to('/uploads/event/').'/'.$filename;
         }
 
 	 $event->save();
@@ -121,10 +128,16 @@ class EventController extends Controller
        
         
         if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/event'), $filename);
-            $event->image= \URL::to('/uploads/event/').'/'.$filename;
+            $image = $request->file('image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $event->image= $imageUrl;
+            // $file= $request->file('image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/event'), $filename);
+            // $event->image= \URL::to('/uploads/event/').'/'.$filename;
         }
 
 	 $event->save();

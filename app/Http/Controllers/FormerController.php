@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Former;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class FormerController extends Controller
 {
     /**
@@ -49,16 +50,29 @@ class FormerController extends Controller
        
         
         if($request->file('President_Image')){
-            $file= $request->file('President_Image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/former'), $filename);
-            $former->President_Image= \URL::to('/uploads/former/').'/'.$filename;
+            $image = $request->file('President_Image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $former->President_Image= $imageUrl;
+          //  $committee->photo= $imageUrl;
+            // $file= $request->file('President_Image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/former'), $filename);
+           
         }
         if($request->file('Secretary_Image')){
-            $file= $request->file('Secretary_Image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/former'), $filename);
-            $former->Secretary_Image= \URL::to('/uploads/former/').'/'.$filename;
+            $image = $request->file('Secretary_Image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $former->Secretary_Image= $imageUrl;
+            // $file= $request->file('Secretary_Image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/former'), $filename);
+            // $former->Secretary_Image= \URL::to('/uploads/former/').'/'.$filename;
         }
         
         
@@ -113,16 +127,29 @@ class FormerController extends Controller
        
         
         if($request->file('President_Image')){
-            $file= $request->file('President_Image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/former'), $filename);
-            $former->President_Image= \URL::to('/uploads/former/').'/'.$filename;
+            $image = $request->file('President_Image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $former->President_Image= $imageUrl;
+          //  $committee->photo= $imageUrl;
+            // $file= $request->file('President_Image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/former'), $filename);
+           
         }
         if($request->file('Secretary_Image')){
-            $file= $request->file('Secretary_Image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/former'), $filename);
-            $former->Secretary_Image= \URL::to('/uploads/former/').'/'.$filename;
+            $image = $request->file('Secretary_Image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $former->Secretary_Image= $imageUrl;
+            // $file= $request->file('Secretary_Image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/former'), $filename);
+            // $former->Secretary_Image= \URL::to('/uploads/former/').'/'.$filename;
         }
 	 $former->save();
         // Return user back and show a flash message

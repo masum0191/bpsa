@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
+
 class PostController extends Controller
 {
     /**
@@ -53,7 +54,7 @@ class PostController extends Controller
             //'Cover_Photo' => 'required|Cover_Photo|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $slider= new Post();
-        $slider->user = 'C-'.\Auth::user()->name;
+        $slider->user = \Auth::user()->name;
         $slider->Category = $request->input('Category');
         $slider->Heading = $request->input('Heading');
         $slider->Sub_Heading = $request->input('Sub_Heading');
@@ -73,7 +74,7 @@ class PostController extends Controller
 
     $imageUrl = $response['data']['url'];
 
-    return $imageUrl;
+    //return $imageUrl;
 
 
             // $response = Http::post('https://api.imgbb.com/1/upload', [
@@ -84,37 +85,68 @@ class PostController extends Controller
             // // Decode the JSON response
             // $data = $response->json();
             // dd($data);
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/post'), $filename);
-            $slider->Cover_Photo= \URL::to('/uploads/post/').'/'.$filename;
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/post'), $filename);
+            $slider->Cover_Photo= $imageUrl;
             
         }
         if($request->file('Document_Link')){
-            $file= $request->file('Document_Link');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/post'), $filename);
-            $slider->Document_Link= \URL::to('/uploads/post/').'/'.$filename;
+    $image = $request->file('Document_Link');
+
+    $response = Http::attach(
+        'image', file_get_contents($image), $image->getClientOriginalName()
+    )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');
+
+    $imageUrl = $response['data']['url'];
+
+    //return $imageUrl;
+            // $file= $request->file('Document_Link');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/post'), $filename);
+            // $slider->Document_Link= \URL::to('/uploads/post/').'/'.$filename;
+            $slider->Document_Link= $imageUrl;
         }
-        // Persist user record to database
+        
+        if($request->hasfile('gimage')){       
+
+
         $data=array();
         // dd($request->hasfile('gimage'));
-        if($request->file('gimage'))
-        {
-           foreach($request->file('gimage') as $file)
-           {
-
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('uploads/post'), $filename);
-            
-            $data[] =$filename; 
-            
-              
-       }
+        // if($request->file('gimage'))
+        // {
+    $client = new Client();    
+    $images = $request->file('gimage');    
+    foreach ($images as $image) {
+        $response = $client->request('POST', 'https://api.imgbb.com/1/upload', [
+            'multipart' => [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($image->getPathname(), 'r'),
+                    'filename' => $image->getClientOriginalName()
+                ],
+                [
+                    'name' => 'key',
+                    'contents' => '01d3eafd9fb565419fba52e1e14a7d5a'
+                ]
+            ]
+        ]);
+       $imgbbResponse = json_decode($response->getBody()->getContents());
+       $data[] = $imgbbResponse->data->url;       
+//}
         }
         $slider->gimage=json_encode($data); 
+        }
 	 $slider->save();
         // Return user back and show a flash message
-        return back()->with(['status' => 'Post upload successfully.']);
+        return back()->with(['status' => 'Post Update successfully.']);
+        // redirect('admin/post')->with(['status' => 'Post Update successfully.']);
+    }
+    public function edit($id)
+    {
+        $category= Category::all();
+        $post=Post::where('id',$id)->first();
+       return view('admin.edit_post')->with('category',$category)->with('post',$post);
+
     }
     public function wstore(Request $request)
     {
@@ -164,38 +196,7 @@ class PostController extends Controller
         // Return user back and show a flash message
         return back()->with(['status' => 'Post upload successfully.']);
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $category= Category::all();
-        $post=Post::where('id',$id)->first();
-       return view('admin.edit_post')->with('category',$category)->with('post',$post);
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
        
@@ -235,50 +236,53 @@ class PostController extends Controller
         
         if($request->file('Cover_Photo')){
            
+            $image = $request->file('Cover_Photo');
 
-$response = Http::post('https://api.imgbb.com/1/upload', [
-    'key' => '01d3eafd9fb565419fba52e1e14a7d5a',
-    'image' => base64_encode(file_get_contents('path/to/your/image.jpg')),
-]);
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');
+        
+            $imageUrl = $response['data']['url'];      
+        
+         $slider->Cover_Photo= $imageUrl;
 
-$data = $response->json();
-
-if ($response->successful()) {
-    // Image uploaded successfully, do something with $data
-    dd($data);
-} else {
-    // Error occurred
-    dd($data);
-}
-
-            $file= $request->file('Cover_Photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/post'), $filename);
-            $slider->Cover_Photo= \URL::to('/uploads/post/').'/'.$filename;
         }
         if($request->file('Document_Link')){
-            $file= $request->file('Document_Link');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/post'), $filename);
-            $slider->Document_Link= \URL::to('/uploads/post/').'/'.$filename;
+            $image = $request->file('Document_Link');
+
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');
+        
+            $imageUrl = $response['data']['url'];
+            $slider->Document_Link= $imageUrl;
         }
         // Persist user record to database
         if($request->hasfile('gimage')){
         $data=array();
-        // dd($request->hasfile('gimage'));
-        if($request->file('gimage'))
-        {
-           foreach($request->file('gimage') as $file)
-           {
-
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('uploads/post'), $filename);
-            
-            $data[] =$filename; 
+        
+    $client = new Client();    
+    $images = $request->file('gimage');    
+    foreach ($images as $image) {
+        $response = $client->request('POST', 'https://api.imgbb.com/1/upload', [
+            'multipart' => [
+                [
+                    'name' => 'image',
+                    'contents' => fopen($image->getPathname(), 'r'),
+                    'filename' => $image->getClientOriginalName()
+                ],
+                [
+                    'name' => 'key',
+                    'contents' => '01d3eafd9fb565419fba52e1e14a7d5a'
+                ]
+            ]
+        ]);
+       $imgbbResponse = json_decode($response->getBody()->getContents());
+       $data[] = $imgbbResponse->data->url;       
             
               
        }
-        }
+        
         $slider->gimage=json_encode($data); 
         }
 	 $slider->save();

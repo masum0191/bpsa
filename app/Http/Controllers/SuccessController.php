@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Success;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class SuccessController extends Controller
 {
     /**
@@ -44,10 +45,16 @@ class SuccessController extends Controller
         $slider->user = \Auth::user()->name;
         
         if($request->file('photo')){
-            $file= $request->file('photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/success'), $filename);
-            $slider->image= \URL::to('/uploads/success/').'/'.$filename;
+            $image = $request->file('photo');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->image= $imageUrl;
+            // $file= $request->file('photo');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/success'), $filename);
+            // $slider->image= \URL::to('/uploads/success/').'/'.$filename;
         }
 
 	 $slider->save();
@@ -95,12 +102,18 @@ class SuccessController extends Controller
         $massege->note = $request->input('note');
        $massege->user =\Auth::user()->name;
         
-        if($request->file('photo')){
-            $file= $request->file('photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/success'), $filename);
-            $massege->image= \URL::to('/uploads/success/').'/'.$filename;
-        }
+       if($request->file('photo')){
+        $image = $request->file('photo');
+        $response = Http::attach(
+            'image', file_get_contents($image), $image->getClientOriginalName()
+        )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+        $imageUrl = $response['data']['url'];
+        $slider->image= $imageUrl;
+        // $file= $request->file('photo');
+        // $filename= date('YmdHi').$file->getClientOriginalName();
+        // $file-> move(public_path('uploads/success'), $filename);
+        // $slider->image= \URL::to('/uploads/success/').'/'.$filename;
+    }
 	    $massege->save();
         // Return user back and show a flash message
         return back()->with(['status' => 'Success Update successfully.']);

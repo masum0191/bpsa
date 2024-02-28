@@ -6,7 +6,8 @@ use App\Models\Committee;
 use App\Models\Designation;
 use App\Models\Comm_group;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class CommitteeController extends Controller
 {
     /**
@@ -59,10 +60,18 @@ class CommitteeController extends Controller
        
         $committee= new Committee();
         if($request->file('photo')){
-            $file= $request->file('photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/committee'), $filename);
-            $committee->photo= \URL::to('/uploads/committee/').'/'.$filename;
+            $image = $request->file('photo');
+
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');
+        
+            $imageUrl = $response['data']['url'];
+            //         $slider->Cover_Photo= $imageUrl;
+            // $file= $request->file('photo');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/committee'), $filename);
+            $committee->photo= $imageUrl;
         }
 
         $committee->PIMS_ID = $request->input('PIMS_ID');
@@ -167,10 +176,18 @@ class CommitteeController extends Controller
             ]);
         
         if($request->file('photo')){
-            $file= $request->file('photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/committee'), $filename);
-            $committee->photo= \URL::to('/uploads/committee/').'/'.$filename;
+            $image = $request->file('photo');
+
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');
+        
+            $imageUrl = $response['data']['url'];
+            //         $slider->Cover_Photo= $imageUrl;
+            // $file= $request->file('photo');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/committee'), $filename);
+            $committee->photo= $imageUrl;
         }
 
         $committee->PIMS_ID = $request->input('PIMS_ID');

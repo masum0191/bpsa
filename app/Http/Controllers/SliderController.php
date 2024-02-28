@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Slider;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class SliderController extends Controller
 {
     /**
@@ -53,10 +54,16 @@ class SliderController extends Controller
 
         // Check if a profile image has been uploaded
         if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/slider'), $filename);
-            $slider->image= \URL::to('/uploads/slider/').'/'.$filename;
+            $image = $request->file('image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->image= $imageUrl;
+            // $file= $request->file('image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/slider'), $filename);
+            // $slider->image= \URL::to('/uploads/slider/').'/'.$filename;
         }
         // Persist user record to database
         $slider->save();
@@ -113,10 +120,16 @@ class SliderController extends Controller
         $slider->title = $request->input('title');
         $slider->description = $request->input('description');
         if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/slider'), $filename);
-            $slider->image= \URL::to('/uploads/slider/').'/'.$filename;
+            $image = $request->file('image');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->image= $imageUrl;
+            // $file= $request->file('image');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/slider'), $filename);
+            // $slider->image= \URL::to('/uploads/slider/').'/'.$filename;
         }
         // Check if a profile image has been uploaded
         

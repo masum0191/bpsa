@@ -95,12 +95,12 @@
                             @endif
                         @else
                         @if(auth()->user()->is_admin == 1)
-                           <a class="navbar-brand" href="{{ url('https://admin.bpsa.com.bd/admin/home') }}">Admin Dashboard</a>
+                           <a class="navbar-brand" href="{{ url('admin/home') }}">Admin Dashboard</a>
                          
                          @elseif(auth()->user()->is_admin == 2)
-                           <a class="navbar-brand" href="{{ url('https://admin.bpsa.com.bd/writer/home') }}">Writer Dashboard</a>
+                           <a class="navbar-brand" href="{{ url('writer/home') }}">Writer Dashboard</a>
                          @else
-                         <a class="navbar-brand" href="{{ url('https://admin.bpsa.com.bd/editor/home') }}">Editor Dashboard</a>
+                         <a class="navbar-brand" href="{{ url('editor/home') }}">Editor Dashboard</a>
                          @endif
                         @endguest
                     </ul>

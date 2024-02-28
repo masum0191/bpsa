@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Massege;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 class MassegeController extends Controller
 {
     /**
@@ -48,10 +49,16 @@ class MassegeController extends Controller
        
         
         if($request->file('photo')){
-            $file= $request->file('photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/massege'), $filename);
-            $slider->photo= \URL::to('/uploads/massege/').'/'.$filename;
+            $image = $request->file('photo');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->photo= $imageUrl;
+            // $file= $request->file('photo');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/massege'), $filename);
+            // $slider->photo= \URL::to('/uploads/massege/').'/'.$filename;
         }
 
 	 $slider->save();
@@ -103,10 +110,16 @@ class MassegeController extends Controller
         $massege->BPSA_Designation = $request->input('BPSA_Designation');
         
         if($request->file('photo')){
-            $file= $request->file('photo');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('uploads/massege'), $filename);
-            $massege->photo= \URL::to('/uploads/massege/').'/'.$filename;
+            $image = $request->file('photo');
+            $response = Http::attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            )->post('https://api.imgbb.com/1/upload?key=01d3eafd9fb565419fba52e1e14a7d5a');        
+            $imageUrl = $response['data']['url'];
+            $slider->photo= $imageUrl;
+            // $file= $request->file('photo');
+            // $filename= date('YmdHi').$file->getClientOriginalName();
+            // $file-> move(public_path('uploads/massege'), $filename);
+            // $slider->photo= \URL::to('/uploads/massege/').'/'.$filename;
         }
 	    $massege->save();
         // Return user back and show a flash message

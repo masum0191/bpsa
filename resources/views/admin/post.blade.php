@@ -208,10 +208,10 @@
             <?php $gellary= json_decode($order->gimage);?>
                                     @foreach ($gellary as $g)
                                     <li class="nav-item">
-                                        <a class="example-image-link nav-link active" href="{{asset('uploads/post/'.$g)}}"
+                                        <a class="example-image-link nav-link active" href="{{$g}}"
                                             data-lightbox="example-set"
                                             data-title="Click the right half of the image to move forward."><img
-                                                class="example-image" src="{{asset('uploads/post/'.$g)}}" alt=""
+                                                class="example-image" src="{{$g}}" alt=""
                                                 style="width:100%; height:110px;" /></a>
 
                                     </li>
@@ -258,10 +258,10 @@
             <?php $gellary= json_decode($order->gimage);?>
                                     @foreach ($gellary as $g)
                                     <li class="nav-item">
-                                        <a class="example-image-link nav-link active" href="{{asset('uploads/post/'.$g)}}"
+                                        <a class="example-image-link nav-link active" href="{{$g}}"
                                             data-lightbox="example-set"
                                             data-title="Click the right half of the image to move forward."><img
-                                                class="example-image" src="{{asset('uploads/post/'.$g)}}" alt=""
+                                                class="example-image" src="{{$g}}" alt=""
                                                 style="width:100%; height:110px;" /></a>
 
                                     </li>
@@ -341,10 +341,10 @@
             <?php $gellary= json_decode($order->gimage);?>
                                     @foreach ($gellary as $g)
                                     <li class="nav-item">
-                                        <a class="example-image-link nav-link active" href="{{asset('uploads/post/'.$g)}}"
+                                        <a class="example-image-link nav-link active" href="{{$g}}"
                                             data-lightbox="example-set"
                                             data-title="Click the right half of the image to move forward."><img
-                                                class="example-image" src="{{asset('uploads/post/'.$g)}}" alt=""
+                                                class="example-image" src="{{$g}}" alt=""
                                                 style="width:50px; height:50px;" /></a>
 
                                     </li>
